@@ -1,0 +1,50 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: my-redis
+    ports:
+      - "6379:6379" # Expose Redis on port 6379
+    volumes:
+      - my-redis:/data
+
+  app1:
+    build:
+      context: .
+    image: my-go-app:v1.0
+    container_name: app1
+    environment:
+      - REDIS_HOST=my-redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis # Ensure Redis starts before the Go app
+
+  app2:
+    image: my-go-app:v1.0
+    container_name: app2
+    environment:
+      - REDIS_HOST=my-redis # Use the service name as the host
+      - REDIS_PORT=6379
+    depends_on:
+      - app1
+
+  app3:
+    image: my-go-app:v1.0
+    container_name: app3
+    environment:
+      - REDIS_HOST=my-redis
+      - REDIS_PORT=6379
+    depends_on:
+      - app2
+
+  nginx:
+    image: nginx:latest
+    container_name: my-nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf 
+    depends_on:
+      - app3
+
+volumes:
+  my-redis:
