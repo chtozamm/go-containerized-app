@@ -18,6 +18,7 @@ const (
 )
 
 func main() {
+	APP_ID := os.Getenv("APP_ID")
 	REDIS_HOST := os.Getenv("REDIS_HOST")
 	REDIS_PORT := os.Getenv("REDIS_PORT")
 	if REDIS_HOST == "" || REDIS_PORT == "" {
@@ -35,6 +36,8 @@ func main() {
 			http.NotFound(w, r)
 			return
 		}
+
+		fmt.Println("Request was served by app", APP_ID)
 
 		// Attempt to get the current count
 		val, err := rdb.Get(ctx, countKey).Result()

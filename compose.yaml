@@ -15,6 +15,7 @@ services:
     environment:
       - REDIS_HOST=my-redis
       - REDIS_PORT=6379
+      - APP_ID=1
     depends_on:
       - redis # Ensure Redis starts before the Go app
 
@@ -24,6 +25,7 @@ services:
     environment:
       - REDIS_HOST=my-redis # Use the service name as the host
       - REDIS_PORT=6379
+      - APP_ID=2
     depends_on:
       - app1
 
@@ -33,6 +35,7 @@ services:
     environment:
       - REDIS_HOST=my-redis
       - REDIS_PORT=6379
+      - APP_ID=3
     depends_on:
       - app2
 
